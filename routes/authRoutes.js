@@ -9,7 +9,7 @@ router.post("/register",registerController)
 
 
 //LOGIN || POST
-router.get("/login",loginController);
+router.post("/login",loginController);
 
 
 //GET CURRENT USER || GET
