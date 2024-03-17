@@ -1,28 +1,34 @@
-const JWT  =require('jsonwebtoken')
+const JWT = require("jsonwebtoken");
 
-module.exports = async (req,res,next)=>{
-    try{
-             const token = req.headers['authorization'].split(" ")[1];
-             JWT.verify(token,process.env.JWT_SECRET,(err,decode) =>{
-                if(err){
-                    return res.status(401).send({
-                        success: false,
-                        message:'Auth Failed',
-                    });
-                }
-                else{
-                    req.body.userId=decode.userId;
-                    next();
-                }
-             });
+module.exports = async (req, res, next) => {
+  try {
+    // Check if 'authorization' header exists
+    // this code is added from chatgpt
+    if (!req.headers["authorization"]) {
+      return res.status(401).send({
+        success: false,
+        message: "Authorization header missing",
+      });
     }
-    catch(error)
-    {
-        console.log(error)
+
+    const token = req.headers["authorization"].split(" ")[1];
+    JWT.verify(token, process.env.JWT_SECRET, (err, decode) => {
+      if (err) {
         return res.status(401).send({
-            success:false,
-            error,
-            message:'Auth Failed'
+          success: false,
+          message: "Auth Failed",
         });
-    }
+      } else {
+        req.body.userId = decode.userId;
+        next();
+      }
+    });
+  } catch (error) {
+    console.log(error);
+    return res.status(401).send({
+      success: false,
+      error,
+      message: "Auth Failed",
+    });
+  }
 };
