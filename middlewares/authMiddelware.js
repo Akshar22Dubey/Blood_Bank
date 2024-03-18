@@ -3,7 +3,7 @@ const JWT = require("jsonwebtoken");
 module.exports = async (req, res, next) => {
   try {
     // Check if 'authorization' header exists
-    // this code is added from chatgpt
+    // this code is added 
     if (!req.headers["authorization"]) {
       return res.status(401).send({
         success: false,
